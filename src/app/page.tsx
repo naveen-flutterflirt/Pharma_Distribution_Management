@@ -1,221 +1,280 @@
-import { HeaderActions } from "@/components/HeaderActions";
+"use client";
 
-export default function Dashboard() {
+import React, { useState } from "react";
+import Link from "next/link";
+import { 
+  Plus, 
+  ArrowRight, 
+  ShoppingCart, 
+  Package, 
+  IndianRupee, 
+  CheckCircle2, 
+  Clock, 
+  AlertTriangle,
+  Receipt,
+  Users,
+  Search
+} from "lucide-react";
+
+export default function AdminDashboard() {
+  const [orders, setOrders] = useState([
+    { id: "ORD-8812", customer: "Sri Sai Medicals", items: 6, amount: 62480, status: "Pending", time: "10:15 AM" },
+    { id: "ORD-8811", customer: "City Care Pharmacy", items: 4, amount: 28400, status: "Pending", time: "09:40 AM" },
+    { id: "ORD-8810", customer: "Apollo Pharmacy Sec-14", items: 12, amount: 114500, status: "Billed", time: "09:10 AM" },
+    { id: "ORD-8809", customer: "MedPlus Chemist", items: 8, amount: 45200, status: "Billed", time: "Yesterday" },
+    { id: "ORD-8808", customer: "Wellness Forever", items: 5, amount: 33100, status: "Billed", time: "Yesterday" },
+  ]);
+
+  const [lowStock, setLowStock] = useState([
+    { name: "Insulin Glargine Pen", company: "Sanofi", stock: 0, min: 20, status: "Out of Stock" },
+    { name: "Amoxicillin + Clav 625", company: "Cipla", stock: 12, min: 50, status: "Low Stock" },
+    { name: "Pantoprazole 40mg", company: "Alkem", stock: 18, min: 60, status: "Low Stock" },
+    { name: "Azithromycin 500mg", company: "Zydus", stock: 8, min: 40, status: "Low Stock" },
+  ]);
+
+  const handleApproveOrder = (id: string) => {
+    setOrders(orders.map(o => o.id === id ? { ...o, status: "Billed" } : o));
+  };
+
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#f6f8f9] overflow-y-auto">
+    <div className="flex-1 flex flex-col bg-[#f6f8f9] min-h-screen overflow-y-auto">
       {/* Top Header */}
-      <header className="px-4 sm:px-8 py-5 sm:py-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-gray-100 bg-white sm:bg-transparent">
+      <header className="px-6 py-6 bg-white border-b border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">Good morning, Mr. Shah</h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-0.5">Thursday, 8 Oct · Main warehouse</p>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-teal-50 text-[#178582] border border-teal-200">
+              Admin Portal
+            </span>
+            <span className="text-xs text-gray-400">•</span>
+            <span className="text-xs text-gray-500 font-medium">Main Distribution Depot</span>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-900 mt-1">
+            Dashboard Overview
+          </h1>
         </div>
-        <HeaderActions />
+
+        {/* Quick Action Buttons for Admin */}
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <Link
+            href="/order-desk"
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-[#178582] hover:bg-[#126b68] text-white text-xs sm:text-sm font-semibold rounded-lg shadow-xs transition-colors cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Order</span>
+          </Link>
+          <Link
+            href="/products"
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 text-xs sm:text-sm font-semibold rounded-lg shadow-xs transition-colors cursor-pointer"
+          >
+            <Package className="w-4 h-4 text-gray-500" />
+            <span>Add Product</span>
+          </Link>
+          <Link
+            href="/collections"
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 text-xs sm:text-sm font-semibold rounded-lg shadow-xs transition-colors cursor-pointer"
+          >
+            <IndianRupee className="w-4 h-4 text-gray-500" />
+            <span>Record Payment</span>
+          </Link>
+        </div>
       </header>
 
-      {/* Main Content Area */}
-      <div className="p-4 sm:p-8 space-y-6">
+      {/* Main Container */}
+      <div className="p-6 space-y-6">
         
-        {/* KPI Cards Row (Fully responsive grid: 2 cols on mobile, 3 on tablet/half-screen, 6 on wide desktop) */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
-          <KpiCard title="Sales today" value="₹14.6L" subtitle="▲ 8% vs last Thu" subtitleColor="text-emerald-600" />
-          <KpiCard title="Gross margin" value="9.8%" subtitle="▼ 0.3 pts — schemes" subtitleColor="text-orange-500" />
-          <KpiCard title="Orders" value="412" subtitle="38 pending billing" subtitleColor="text-gray-500" />
-          <KpiCard title="Fill rate" value="96.1%" subtitle="71 lines short" subtitleColor="text-orange-500" />
-          <KpiCard title="Outstanding" value="₹2.84Cr" subtitle="₹38L over 45 days" subtitleColor="text-orange-500" />
-          <KpiCard title="Claims pending" value="₹11.2L" subtitle="₹3.1L older than 90 d" subtitleColor="text-orange-500" />
+        {/* 4 Core Admin KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          {/* Today's Sales */}
+          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Today's Sales</p>
+              <h3 className="text-2xl font-bold text-gray-900 mt-1 font-mono">₹1,48,250</h3>
+              <p className="text-xs text-emerald-600 font-semibold mt-1 flex items-center gap-1">
+                <span>↑ 12% vs yesterday</span>
+              </p>
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-teal-50 text-[#178582] flex items-center justify-center">
+              <IndianRupee className="w-6 h-6" />
+            </div>
+          </div>
+
+          {/* Pending Orders */}
+          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Pending Orders</p>
+              <h3 className="text-2xl font-bold text-gray-900 mt-1">2 Orders</h3>
+              <p className="text-xs text-amber-600 font-semibold mt-1">
+                Awaiting billing approval
+              </p>
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+              <Clock className="w-6 h-6" />
+            </div>
+          </div>
+
+          {/* Low Stock Alert */}
+          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Low Stock Alert</p>
+              <h3 className="text-2xl font-bold text-gray-900 mt-1">4 Items</h3>
+              <p className="text-xs text-red-600 font-semibold mt-1">
+                Need immediate reorder
+              </p>
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+              <AlertTriangle className="w-6 h-6" />
+            </div>
+          </div>
+
+          {/* Total Outstanding */}
+          <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-xs flex items-center justify-between">
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Total Due (Chemist)</p>
+              <h3 className="text-2xl font-bold text-gray-900 mt-1 font-mono">₹3,42,800</h3>
+              <p className="text-xs text-gray-500 font-medium mt-1">
+                Across 18 registered parties
+              </p>
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+              <Users className="w-6 h-6" />
+            </div>
+          </div>
+
         </div>
 
-        {/* Middle Row (1 col on mobile, 2 on tablet, 3 on desktop) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+        {/* 2 Main Management Sections (Orders & Low Stock) */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
-          {/* Sales by channel */}
-          <div className="bg-white rounded-xl border border-gray-200/80 shadow-xs p-5">
-            <h2 className="text-sm sm:text-[15px] font-bold text-gray-900 mb-4">Sales by channel — today</h2>
-            <div className="space-y-4">
-              <ChannelBar label="Salesman app" value="₹6.1L" percent={60} color="bg-[#178582]" />
-              <ChannelBar label="Chemist app" value="₹3.8L" percent={40} color="bg-[#178582]" />
-              <ChannelBar label="Phone / WhatsApp" value="₹2.4L" percent={25} color="bg-[#94a3b8]" />
-              <ChannelBar label="Hospitals" value="₹1.9L" percent={20} color="bg-[#178582]" />
-              <ChannelBar label="Counter" value="₹0.4L" percent={5} color="bg-[#178582]" />
-            </div>
-          </div>
-
-          {/* Top principals */}
-          <div className="bg-white rounded-xl border border-gray-200/80 shadow-xs p-5">
-            <h2 className="text-sm sm:text-[15px] font-bold text-gray-900 mb-4">Top principals — month to date</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs sm:text-sm min-w-[260px]">
-                <thead>
-                  <tr className="text-left text-gray-500 border-b border-gray-100 text-[11px] sm:text-xs font-semibold">
-                    <th className="pb-2.5 pr-3 font-semibold">Principal</th>
-                    <th className="pb-2.5 px-3 font-semibold">Sales</th>
-                    <th className="pb-2.5 pl-3 font-semibold text-right">Margin</th>
-                  </tr>
-                </thead>
-                <tbody className="text-gray-900 font-medium">
-                  <tr className="border-b border-gray-50 hover:bg-gray-50/60 transition-colors">
-                    <td className="py-2.5 pr-3 font-bold text-gray-800 whitespace-nowrap">Principal A (Cipla)</td>
-                    <td className="py-2.5 px-3 font-mono font-semibold whitespace-nowrap">₹62.4L</td>
-                    <td className="py-2.5 pl-3 text-right font-mono text-emerald-700 font-bold whitespace-nowrap">10.2%</td>
-                  </tr>
-                  <tr className="border-b border-gray-50 hover:bg-gray-50/60 transition-colors">
-                    <td className="py-2.5 pr-3 font-bold text-gray-800 whitespace-nowrap">Principal B (Sun)</td>
-                    <td className="py-2.5 px-3 font-mono font-semibold whitespace-nowrap">₹48.1L</td>
-                    <td className="py-2.5 pl-3 text-right font-mono text-emerald-700 font-bold whitespace-nowrap">9.1%</td>
-                  </tr>
-                  <tr className="border-b border-gray-50 hover:bg-gray-50/60 transition-colors">
-                    <td className="py-2.5 pr-3 font-bold text-gray-800 whitespace-nowrap">Principal C (Abbott)</td>
-                    <td className="py-2.5 px-3 font-mono font-semibold whitespace-nowrap">₹31.7L</td>
-                    <td className="py-2.5 pl-3 text-right font-mono text-emerald-700 font-bold whitespace-nowrap">11.4%</td>
-                  </tr>
-                  <tr className="border-b border-gray-50 last:border-0 hover:bg-gray-50/60 transition-colors">
-                    <td className="py-2.5 pr-3 font-bold text-gray-800 whitespace-nowrap">Principal D (GSK)</td>
-                    <td className="py-2.5 px-3 font-mono font-semibold whitespace-nowrap">₹22.9L</td>
-                    <td className="py-2.5 pl-3 text-right font-mono text-emerald-700 font-bold whitespace-nowrap">8.6%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Receivables ageing */}
-          <div className="bg-white rounded-xl border border-gray-200/80 shadow-xs p-5 flex flex-col md:col-span-2 xl:col-span-1">
-            <h2 className="text-sm sm:text-[15px] font-bold text-gray-900 mb-6">Receivables ageing</h2>
-            <div className="flex-1 flex items-end justify-between gap-2 pb-2 min-h-[120px]">
-              <AgeingBar label="0–15 d" value="₹1.36Cr" height="h-24" color="bg-[#a8d3d1]" />
-              <AgeingBar label="16–30 d" value="₹0.88Cr" height="h-16" color="bg-[#a8d3d1]" />
-              <AgeingBar label="31–45 d" value="₹0.22Cr" height="h-8" color="bg-[#f59e0b]" />
-              <AgeingBar label=">45 d" value="₹0.38Cr" height="h-10" color="bg-[#ef4444]" />
-            </div>
-            <div className="text-xs text-red-600 font-bold mt-3 pt-3 border-t border-gray-100 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-red-600"></span>
-              <span>17 customers auto-blocked for overdue &gt; 45d</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Row */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6">
-          
-          {/* Shortages hurting fill rate */}
-          <div className="xl:col-span-2 bg-white rounded-xl border border-gray-200/80 shadow-xs p-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-              <h2 className="text-sm sm:text-[15px] font-bold text-gray-900">Shortages hurting fill rate</h2>
-              <a href="/purchase" className="text-xs sm:text-sm text-[#178582] hover:underline font-semibold cursor-pointer">
-                Create purchase order →
-              </a>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs sm:text-sm min-w-[540px]">
-                <thead>
-                  <tr className="text-left text-gray-500 border-b border-gray-100 text-[11px] sm:text-xs">
-                    <th className="pb-2.5 pr-4 font-semibold">Product</th>
-                    <th className="pb-2.5 px-3 font-semibold">Principal</th>
-                    <th className="pb-2.5 px-3 font-semibold">Demand today</th>
-                    <th className="pb-2.5 px-3 font-semibold text-center">In stock</th>
-                    <th className="pb-2.5 pl-3 font-semibold text-right">Lost sales</th>
-                  </tr>
-                </thead>
-                <tbody className="text-gray-900 font-medium">
-                  <tr className="border-b border-gray-50 hover:bg-gray-50/60 transition-colors">
-                    <td className="py-3 pr-4 font-bold text-gray-900 whitespace-nowrap">Amoxicillin + Clav 625 tab</td>
-                    <td className="py-3 px-3 text-gray-500 whitespace-nowrap">Principal B</td>
-                    <td className="py-3 px-3 font-semibold whitespace-nowrap">340 strips</td>
-                    <td className="py-3 px-3 font-mono text-amber-700 font-bold text-center whitespace-nowrap">120</td>
-                    <td className="py-3 pl-3 text-right text-red-600 font-bold font-mono whitespace-nowrap">₹21,400</td>
-                  </tr>
-                  <tr className="border-b border-gray-50 hover:bg-gray-50/60 transition-colors">
-                    <td className="py-3 pr-4 font-bold text-gray-900 whitespace-nowrap">Insulin glargine pen</td>
-                    <td className="py-3 px-3 text-gray-500 whitespace-nowrap">Principal A</td>
-                    <td className="py-3 px-3 font-semibold whitespace-nowrap">48</td>
-                    <td className="py-3 px-3 font-mono text-red-700 font-bold text-center whitespace-nowrap">0</td>
-                    <td className="py-3 pl-3 text-right text-red-600 font-bold font-mono whitespace-nowrap">₹18,900</td>
-                  </tr>
-                  <tr className="border-b border-gray-50 hover:bg-gray-50/60 transition-colors">
-                    <td className="py-3 pr-4 font-bold text-gray-900 whitespace-nowrap">Pantoprazole 40 tab</td>
-                    <td className="py-3 px-3 text-gray-500 whitespace-nowrap">Principal C</td>
-                    <td className="py-3 px-3 font-semibold whitespace-nowrap">510 strips</td>
-                    <td className="py-3 px-3 font-mono text-amber-700 font-bold text-center whitespace-nowrap">300</td>
-                    <td className="py-3 pl-3 text-right text-red-600 font-bold font-mono whitespace-nowrap">₹9,600</td>
-                  </tr>
-                  <tr className="border-b border-gray-50 last:border-0 hover:bg-gray-50/60 transition-colors">
-                    <td className="py-3 pr-4 font-bold text-gray-900 whitespace-nowrap">ORS sachet</td>
-                    <td className="py-3 px-3 text-gray-500 whitespace-nowrap">Principal D</td>
-                    <td className="py-3 px-3 font-semibold whitespace-nowrap">1,200</td>
-                    <td className="py-3 px-3 font-mono text-gray-700 font-bold text-center whitespace-nowrap">650</td>
-                    <td className="py-3 pl-3 text-right text-red-600 font-bold font-mono whitespace-nowrap">₹4,100</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Right column: Expiry watch & Collected today */}
-          <div className="space-y-4 sm:space-y-6">
-            {/* Expiry watch */}
-            <div className="bg-white rounded-xl border border-gray-200/80 shadow-xs p-5">
-              <h2 className="text-sm sm:text-[15px] font-bold text-gray-900 mb-4">Expiry watch</h2>
-              <div className="space-y-3 text-xs sm:text-sm">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Expiring in 90 days</span>
-                  <span className="font-bold text-gray-900 font-mono">₹8.4L</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Returnable to principals</span>
-                  <span className="font-bold text-[#178582] font-mono">₹6.9L</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Expired returns from chemists</span>
-                  <span className="font-bold text-gray-900 font-mono">₹2.2L</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Collected today */}
-            <div className="bg-[#0c2427] text-white rounded-xl shadow-xs p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="text-2xl sm:text-3xl font-bold tracking-tight text-white font-mono">₹4.7L</div>
+          {/* Left: Orders Management (2 Cols) */}
+          <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-xs flex flex-col">
+            <div className="p-5 border-b border-gray-100 flex items-center justify-between">
               <div>
-                <div className="font-bold text-sm sm:text-[15px] text-white">Collected today</div>
-                <div className="text-xs text-[#8ea7aa] mt-0.5">UPI 61% · cheque 24% · cash 15%</div>
+                <h2 className="text-base font-bold text-gray-900">Recent Orders</h2>
+                <p className="text-xs text-gray-500 mt-0.5">Approve, bill, and dispatch customer orders</p>
               </div>
+              <Link 
+                href="/order-desk" 
+                className="text-xs font-bold text-[#178582] hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <span>View all orders</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="bg-gray-50/75 text-[11px] font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                    <th className="py-3 px-4">Order ID</th>
+                    <th className="py-3 px-4">Customer</th>
+                    <th className="py-3 px-4">Amount</th>
+                    <th className="py-3 px-4">Status</th>
+                    <th className="py-3 px-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 font-medium text-xs sm:text-sm">
+                  {orders.map((ord) => (
+                    <tr key={ord.id} className="hover:bg-gray-50/80 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-gray-900">
+                        {ord.id}
+                        <div className="text-[11px] text-gray-400 font-normal">{ord.time}</div>
+                      </td>
+                      <td className="py-3.5 px-4 text-gray-800">
+                        {ord.customer}
+                        <div className="text-[11px] text-gray-400 font-normal">{ord.items} medicine lines</div>
+                      </td>
+                      <td className="py-3.5 px-4 font-mono font-bold text-gray-900">
+                        ₹{ord.amount.toLocaleString("en-IN")}
+                      </td>
+                      <td className="py-3.5 px-4">
+                        {ord.status === "Pending" ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                            <Clock className="w-3 h-3" />
+                            Pending
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <CheckCircle2 className="w-3 h-3" />
+                            Billed
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4 text-right">
+                        {ord.status === "Pending" ? (
+                          <button
+                            type="button"
+                            onClick={() => handleApproveOrder(ord.id)}
+                            className="px-3 py-1.5 bg-[#178582] hover:bg-[#126b68] text-white text-xs font-bold rounded-md shadow-2xs transition-colors cursor-pointer"
+                          >
+                            Approve &amp; Bill
+                          </button>
+                        ) : (
+                          <Link
+                            href="/billing"
+                            className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-md transition-colors cursor-pointer inline-block"
+                          >
+                            View Invoice
+                          </Link>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Right: Low Stock Alert (1 Col) */}
+          <div className="bg-white rounded-xl border border-gray-200 shadow-xs flex flex-col">
+            <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+              <div>
+                <h2 className="text-base font-bold text-gray-900">Low Stock Alert</h2>
+                <p className="text-xs text-gray-500 mt-0.5">Medicines reaching reorder point</p>
+              </div>
+              <Link 
+                href="/purchase" 
+                className="text-xs font-bold text-[#178582] hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <span>Order Stock</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            <div className="p-4 divide-y divide-gray-100">
+              {lowStock.map((item, idx) => (
+                <div key={idx} className="py-3 first:pt-0 last:pb-0 flex items-center justify-between gap-3">
+                  <div>
+                    <h4 className="text-xs font-bold text-gray-900">{item.name}</h4>
+                    <p className="text-[11px] text-gray-500">{item.company}</p>
+                    <div className="text-[11px] text-gray-600 mt-0.5">
+                      Stock: <span className="font-bold text-red-600">{item.stock}</span> (Min: {item.min})
+                    </div>
+                  </div>
+                  <div>
+                    <Link
+                      href="/purchase"
+                      className="px-2.5 py-1 text-xs font-bold rounded bg-teal-50 text-[#178582] border border-teal-200 hover:bg-teal-100 transition-colors inline-block cursor-pointer"
+                    >
+                      Reorder
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="p-4 bg-gray-50 border-t border-gray-100 mt-auto rounded-b-xl text-center">
+              <Link
+                href="/products"
+                className="text-xs font-bold text-gray-700 hover:text-[#178582] transition-colors cursor-pointer"
+              >
+                View Full Medicine Inventory ({`1,280 products`}) &rarr;
+              </Link>
             </div>
           </div>
 
         </div>
-      </div>
-    </div>
-  );
-}
 
-function KpiCard({ title, value, subtitle, subtitleColor }: { title: string, value: string, subtitle: string, subtitleColor: string }) {
-  return (
-    <div className="bg-white rounded-xl border border-gray-200/80 shadow-xs p-3.5 sm:p-4 flex flex-col justify-between hover:border-gray-300 transition-colors">
-      <div className="text-xs text-gray-500 font-semibold truncate" title={title}>{title}</div>
-      <div className="my-1.5 text-xl sm:text-2xl font-bold text-gray-900 font-mono tracking-tight">{value}</div>
-      <div className={`text-[11px] sm:text-xs font-semibold ${subtitleColor} truncate`} title={subtitle}>{subtitle}</div>
-    </div>
-  );
-}
-
-function ChannelBar({ label, value, percent, color }: { label: string, value: string, percent: number, color: string }) {
-  return (
-    <div className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm">
-      <div className="w-28 sm:w-32 text-gray-600 font-medium truncate" title={label}>{label}</div>
-      <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
-        <div className={`h-full ${color} rounded-full transition-all duration-500`} style={{ width: `${percent}%` }}></div>
-      </div>
-      <div className="w-12 sm:w-14 text-right font-bold text-gray-900 font-mono">{value}</div>
-    </div>
-  );
-}
-
-function AgeingBar({ label, value, height, color }: { label: string, value: string, height: string, color: string }) {
-  return (
-    <div className="flex-1 flex flex-col items-center gap-2">
-      <div className={`w-full max-w-[36px] sm:max-w-[44px] rounded-t-sm ${color} ${height} transition-all`}></div>
-      <div className="text-center text-[10px] sm:text-xs">
-        <div className="text-gray-500 font-medium">{label}</div>
-        <div className="font-bold text-gray-900 mt-0.5 font-mono">{value}</div>
       </div>
     </div>
   );
