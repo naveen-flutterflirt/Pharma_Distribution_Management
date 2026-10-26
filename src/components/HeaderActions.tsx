@@ -33,6 +33,11 @@ export function HeaderActions() {
           type="text" 
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && searchQuery.trim()) {
+              router.push(`/order-desk?search=${encodeURIComponent(searchQuery.trim())}`);
+            }
+          }}
           placeholder="Search product, party, bill..." 
           className="pl-9 pr-8 py-2 w-full rounded-md border border-gray-200 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-[#178582] focus:border-[#178582] transition-all bg-white text-gray-900 placeholder:text-gray-400 font-medium shadow-xs"
         />

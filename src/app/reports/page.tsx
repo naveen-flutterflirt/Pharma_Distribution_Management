@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import {
   BarChart3,
   FileSpreadsheet,
@@ -668,7 +669,20 @@ export default function ReportsPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Link
+              href="/"
+              className="px-3 py-2 bg-gray-50 border border-gray-200 text-gray-700 rounded-md text-xs font-semibold hover:bg-gray-100 transition-colors"
+            >
+              ← Dashboard
+            </Link>
+            <Link
+              href="/billing"
+              className="px-3 py-2 bg-teal-50 border border-teal-200 text-[#178582] rounded-md text-xs font-semibold hover:bg-teal-100 transition-colors"
+            >
+              Billing Registers →
+            </Link>
+
             {/* Period Selector */}
             <div className="relative">
               <select
@@ -691,7 +705,7 @@ export default function ReportsPage() {
               className="flex items-center gap-2 px-3.5 py-2 bg-white border border-gray-200 text-gray-700 rounded-md text-xs sm:text-sm font-semibold hover:bg-gray-50 transition-colors shadow-xs cursor-pointer"
             >
               <Download className="w-4 h-4 text-[#178582]" />
-              <span>Export Audit Pack</span>
+              <span>Export Audit</span>
             </button>
 
             {/* Send Daily MIS */}
@@ -702,7 +716,7 @@ export default function ReportsPage() {
               className="flex items-center gap-2 px-4 py-2 bg-[#178582] text-white rounded-md text-xs sm:text-sm font-semibold hover:bg-[#126b68] transition-colors shadow-sm cursor-pointer active:scale-95"
             >
               <Share2 className="w-4 h-4" />
-              <span>Send Daily MIS (9 AM)</span>
+              <span>Send Daily MIS</span>
             </button>
           </div>
         </div>

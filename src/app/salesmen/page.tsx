@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import {
   Users,
   MapPin,
@@ -284,7 +285,19 @@ export default function SalesmenPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Link
+              href="/order-desk"
+              className="px-3 py-2 bg-teal-50 border border-teal-200 text-[#178582] rounded-md text-xs font-semibold hover:bg-teal-100 transition-colors"
+            >
+              Order Intake Desk →
+            </Link>
+            <Link
+              href="/customers"
+              className="px-3 py-2 bg-gray-50 border border-gray-200 text-gray-700 rounded-md text-xs font-semibold hover:bg-gray-100 transition-colors"
+            >
+              Customer Accounts →
+            </Link>
             <button
               onClick={() => {
                 showToast("Today's beat plan push-notified to salesmen mobile apps.", "info");
@@ -292,7 +305,7 @@ export default function SalesmenPage() {
               className="flex items-center gap-2 px-3.5 py-2 bg-white border border-gray-200 text-gray-700 rounded-md text-xs sm:text-sm font-semibold hover:bg-gray-50 transition-colors shadow-xs cursor-pointer"
             >
               <Share2 className="w-4 h-4 text-[#178582]" />
-              <span>Broadcast Beat Plan</span>
+              <span>Broadcast Beat</span>
             </button>
             <button
               onClick={() => {

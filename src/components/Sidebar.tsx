@@ -25,12 +25,17 @@ import {
 
 const menuItems = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Orders', href: '/order-desk', icon: FileText },
-  { name: 'Invoices', href: '/billing', icon: Receipt },
+  { name: 'Order Desk', href: '/order-desk', icon: FileText },
+  { name: 'Billing', href: '/billing', icon: Receipt },
   { name: 'Products & Stock', href: '/products', icon: Package },
-  { name: 'Purchases', href: '/purchase', icon: ShoppingCart },
+  { name: 'Purchase', href: '/purchase', icon: ShoppingCart },
+  { name: 'Warehouse', href: '/warehouse', icon: Warehouse },
+  { name: 'Delivery', href: '/delivery', icon: Truck },
   { name: 'Customers', href: '/customers', icon: Users },
-  { name: 'Payments', href: '/collections', icon: IndianRupee },
+  { name: 'Collections', href: '/collections', icon: IndianRupee },
+  { name: 'Claims', href: '/claims', icon: ShieldAlert },
+  { name: 'Salesmen', href: '/salesmen', icon: UserCheck },
+  { name: 'Reports', href: '/reports', icon: BarChart3 },
   { name: 'Settings', href: '/settings', icon: SettingsIcon },
 ];
 

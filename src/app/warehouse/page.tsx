@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import {
   Boxes,
   Truck,
@@ -310,13 +311,25 @@ export default function WarehousePage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Link
+              href="/billing"
+              className="px-3 py-2 bg-gray-50 border border-gray-200 text-gray-700 rounded-md text-xs font-semibold hover:bg-gray-100 transition-colors"
+            >
+              ← Billed Invoices
+            </Link>
+            <Link
+              href="/delivery"
+              className="px-3 py-2 bg-purple-50 border border-purple-200 text-purple-700 rounded-md text-xs font-semibold hover:bg-purple-100 transition-colors"
+            >
+              Van Delivery Manifest →
+            </Link>
             <button
               onClick={() => setShowScannerModal(true)}
               className="flex items-center gap-2 px-3.5 py-2 bg-white border border-gray-200 text-gray-700 rounded-md text-xs sm:text-sm font-semibold hover:bg-gray-50 transition-colors shadow-xs cursor-pointer"
             >
               <ScanLine className="w-4 h-4 text-[#178582]" />
-              <span>Barcode Check Scanner</span>
+              <span>Barcode Check</span>
             </button>
             <button
               onClick={handleSealAndPrint}
@@ -608,7 +621,14 @@ export default function WarehousePage() {
               </span>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Link
+                href="/delivery"
+                className="px-3.5 py-1.5 bg-[#0c2427] text-white hover:bg-[#153a3e] rounded font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+              >
+                <Truck className="w-3.5 h-3.5 text-teal-400" />
+                <span>Dispatch to Van →</span>
+              </Link>
               <button
                 onClick={() => showToast(`Thermal outer carton label printed for ${selectedWave.trayId}.`, "info")}
                 className="px-3.5 py-1.5 border border-gray-300 rounded font-semibold text-gray-700 hover:bg-white flex items-center gap-1.5 cursor-pointer shadow-xs"

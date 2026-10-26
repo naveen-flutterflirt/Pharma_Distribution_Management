@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import {
   FileText,
   Search,
@@ -204,7 +205,19 @@ export default function ClaimsPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Link
+              href="/purchase"
+              className="px-3 py-2 bg-gray-50 border border-gray-200 text-gray-700 rounded-md text-xs font-semibold hover:bg-gray-100 transition-colors"
+            >
+              ← Purchases
+            </Link>
+            <Link
+              href="/collections"
+              className="px-3 py-2 bg-teal-50 border border-teal-200 text-[#178582] rounded-md text-xs font-semibold hover:bg-teal-100 transition-colors"
+            >
+              Collections →
+            </Link>
             <button
               onClick={() => {
                 showToast("Generating batch-wise claim package in Principal EDI format...", "info");
@@ -212,14 +225,14 @@ export default function ClaimsPage() {
               className="flex items-center gap-2 px-3.5 py-2 bg-white border border-gray-200 text-gray-700 rounded-md text-xs sm:text-sm font-semibold hover:bg-gray-50 transition-colors shadow-xs cursor-pointer"
             >
               <Download className="w-4 h-4 text-[#178582]" />
-              <span>Export Claim Dossier</span>
+              <span>Export Dossier</span>
             </button>
             <button
               onClick={() => setShowNewClaimModal(true)}
               className="flex items-center gap-2 px-4 py-2 bg-[#178582] text-white rounded-md text-xs sm:text-sm font-semibold hover:bg-[#126b68] transition-colors shadow-sm cursor-pointer active:scale-95"
             >
               <Plus className="w-4 h-4" />
-              <span>Raise New Claim</span>
+              <span>Raise Claim</span>
             </button>
           </div>
         </div>
