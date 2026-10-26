@@ -19,7 +19,8 @@ import {
   UserCheck, 
   BarChart3, 
   Settings as SettingsIcon,
-  ChevronRight
+  ChevronRight,
+  LogOut
 } from 'lucide-react';
 
 const menuItems = [
@@ -41,6 +42,10 @@ const menuItems = [
 export function Sidebar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  if (pathname === '/login') {
+    return null;
+  }
 
   const activeItem = menuItems.find(item => item.href === pathname) || menuItems[0];
 
@@ -124,8 +129,18 @@ export function Sidebar() {
             </nav>
 
             <div className="p-4 border-t border-[#153a3e] text-[11px] text-[#8ea7aa] flex items-center justify-between">
-              <span>Blueprint v1.0 Standard</span>
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <div>
+                <div className="text-white font-semibold">Mr. Rajesh Shah</div>
+                <div className="text-[10px] text-emerald-400">Director • Depot 1</div>
+              </div>
+              <Link
+                href="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-2.5 py-1.5 rounded bg-[#153a3e] hover:bg-[#1c4d52] text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-xs"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Sign in</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -164,11 +179,22 @@ export function Sidebar() {
           })}
         </nav>
 
-        <div className="p-4 mx-3 mb-4 rounded-lg bg-[#153a3e]/40 border border-[#153a3e] text-[11px] text-[#8ea7aa]">
-          <div className="text-white font-semibold">Warehouse Central</div>
-          <div className="text-[10px] text-emerald-400 mt-0.5 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            Online • FEFO Active
+        <div className="p-3 mx-3 mb-4 rounded-lg bg-[#153a3e]/40 border border-[#153a3e] text-[11px] text-[#8ea7aa]">
+          <div className="flex items-center justify-between">
+            <div className="min-w-0 pr-2">
+              <div className="text-white font-semibold truncate">Mr. Rajesh Shah</div>
+              <div className="text-[10px] text-emerald-400 mt-0.5 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"></span>
+                <span className="truncate">Director • Depot 1</span>
+              </div>
+            </div>
+            <Link 
+              href="/login" 
+              title="Sign In / Switch Persona"
+              className="p-1.5 rounded-md hover:bg-[#1c4d52] text-gray-300 hover:text-white transition-colors cursor-pointer shrink-0"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </aside>
