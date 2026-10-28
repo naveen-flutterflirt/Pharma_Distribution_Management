@@ -23,7 +23,8 @@
     "db:generate": "npm --prefix backend run db:generate",
     "db:studio": "npm --prefix backend run db:studio",
     "test:flow": "node tests/browser_modules_connectivity_test.mjs",
-    "test:e2e": "node tests/e2e_full_business_flow.mjs"
+    "test:e2e": "node tests/e2e_full_business_flow.mjs",
+    "test:audit": "node tests/production_readiness_audit.mjs"
   },
   "keywords": [
     "pharma",

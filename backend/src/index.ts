@@ -13,7 +13,14 @@ const PORT = config.PORT;
 app.use(helmet());
 app.use(
   cors({
-    origin: config.CORS_ORIGINS,
+    origin: (requestOrigin, callback) => {
+      if (!requestOrigin) return callback(null, true);
+      if (config.NODE_ENV !== "production") return callback(null, true);
+      if (config.ALLOWED_ORIGINS.includes(requestOrigin)) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
   })

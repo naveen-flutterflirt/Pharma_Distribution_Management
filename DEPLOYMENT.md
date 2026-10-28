@@ -228,11 +228,11 @@ To verify deployment integrity post-release:
    ```
 2. **Execute Full End-to-End Business Lifecycle Test**:
    ```bash
-   node scratch/e2e_full_business_flow.mjs
+   npm run test:e2e
    # Expected: 31/31 steps passed (100.0% success rate)
    ```
 3. **Execute Full Browser Suite**:
    ```bash
-   node scratch/browser_flow_tester.mjs
-   # Expected: 13/13 pages HTTP 200, 0 runtime errors
+   npm run test:flow
+   # Expected: 24/24 checks passed, 0 runtime errors
    ```
