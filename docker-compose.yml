@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pharma_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: pharma_admin
+      POSTGRES_PASSWORD: pharma_secure_pass_2026
+      POSTGRES_DB: pharma_dms
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pharma_admin -d pharma_dms"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: pharma_backend
+    restart: always
+    environment:
+      PORT: 5001
+      NODE_ENV: production
+      DATABASE_URL: "postgresql://pharma_admin:pharma_secure_pass_2026@postgres:5432/pharma_dms?schema=public"
+      FRONTEND_URL: "http://localhost:3000"
+      JWT_SECRET: "pharma_dms_jwt_secret_key_prod_2026_981248"
+      JWT_EXPIRES_IN: "7d"
+    ports:
+      - "5001:5001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: "http://localhost:5001/api"
+    container_name: pharma_frontend
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+    driver: local

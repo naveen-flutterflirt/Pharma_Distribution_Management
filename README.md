@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pharma Distribution Management System (Pharma DMS)
 
-## Getting Started
+An enterprise-grade, high-volume pharmaceutical distribution and supply chain ERP built with modern web technologies: Next.js 16 (React 19, TailwindCSS), Express 4 (TypeScript, MVC), Prisma ORM, and PostgreSQL.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📁 Repository Structure
+
+```
+Pharma_Distribution_Management/
+├── frontend/                     # Next.js 16.4.3 Web Client
+│   ├── src/
+│   │   ├── app/                 # 13 Application Modules & App Router
+│   │   ├── components/          # Reusable UI & Layout Components
+│   │   ├── context/             # Auth & Global State Context
+│   │   ├── lib/                 # Type-Safe API Client & Utilities
+│   │   └── proxy.ts             # Authentication & Route Guard Proxy
+│   ├── public/                  # Static Assets & Icons
+│   ├── Dockerfile               # Multi-stage Next.js Container
+│   ├── .dockerignore
+│   ├── .env.example
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── next.config.ts
+│
+├── backend/                      # Express + TypeScript + Prisma API
+│   ├── src/
+│   │   ├── config/              # Environment & App Configuration
+│   │   ├── controllers/         # MVC Controllers for all Pharma Domains
+│   │   ├── db/                  # Prisma Client Instance
+│   │   ├── middleware/          # JWT Auth, Validation & Rate Limiting
+│   │   ├── routes/              # Express API Routes
+│   │   └── prisma/seed.ts       # Database Seed Script
+│   ├── prisma/
+│   │   └── schema.prisma        # Complete Relational Database Schema
+│   ├── Dockerfile               # Multi-stage Backend Container
+│   ├── .dockerignore
+│   ├── .env.example
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── scratch/                      # Automated E2E & Browser Test Suites
+├── docker-compose.yml            # 1-Click Multi-Service Orchestrator
+├── ecosystem.config.js           # PM2 Process Manager Configuration
+├── DEPLOYMENT.md                 # Production Operations & Deployment Guide
+├── package.json                  # Root Monorepo Orchestrator
+└── README.md                     # Project Documentation
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Quick Start (Development)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Prerequisites
+- **Node.js**: v20 or higher
+- **PostgreSQL**: v16 or higher (or Docker)
 
-## Learn More
+### 2. Configure Environment
+```bash
+# Frontend
+cp frontend/.env.example frontend/.env.local
 
-To learn more about Next.js, take a look at the following resources:
+# Backend
+cp backend/.env.example backend/.env
+# Edit DATABASE_URL and secrets in backend/.env
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. Initialize Database
+```bash
+npm run db:push
+npm run db:seed
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. Run Development Servers
+```bash
+# Run both Backend (Port 5001) and Frontend (Port 3000)
+npm run dev
 
-## Deploy on Vercel
+# Or run separately:
+npm run dev:backend
+npm run dev:frontend
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📦 Production Deployment
+
+### Option A: Docker Compose (Recommended)
+```bash
+docker compose up -d --build
+```
+
+### Option B: PM2 on Linux VPS
+```bash
+npm run build
+pm2 start ecosystem.config.js
+```
+
+For complete VPS, NGINX SSL reverse proxy, and backup instructions, see [DEPLOYMENT.md](file:///Users/pranjalsoni/Desktop/Pharma/DEPLOYMENT.md).
+
+---
+
+## 🧪 Verification & Automated Testing
+```bash
+# Run full browser suite across all 13 modules (Google Chrome)
+npm run test:flow
+
+# Run 31-step commercial business lifecycle test
+npm run test:e2e
+```

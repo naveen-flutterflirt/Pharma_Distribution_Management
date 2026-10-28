@@ -1,27 +1,39 @@
 {
-  "name": "pharma",
-  "version": "0.1.0",
+  "name": "pharma-distribution-management-system",
+  "version": "1.0.0",
   "private": true,
+  "description": "Pharma Distribution Management System (Pharma DMS) - Enterprise Monorepo",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev": "npm run dev:backend & npm run dev:frontend",
+    "build:frontend": "npm --prefix frontend run build",
+    "build:backend": "npm --prefix backend run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "start:frontend": "npm --prefix frontend run start",
+    "start:backend": "npm --prefix backend run start",
+    "start": "npm run start:backend & npm run start:frontend",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "db:push": "npm --prefix backend run db:push",
+    "db:seed": "npm --prefix backend run db:seed",
+    "db:generate": "npm --prefix backend run db:generate",
+    "db:studio": "npm --prefix backend run db:studio",
+    "test:flow": "node tests/browser_modules_connectivity_test.mjs",
+    "test:e2e": "node tests/e2e_full_business_flow.mjs"
   },
-  "dependencies": {
-    "lucide-react": "^1.54.0",
-    "next": "^16.4.3",
-    "react": "19.3.0",
-    "react-dom": "19.3.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/turbopack": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "^16.4.3",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+  "keywords": [
+    "pharma",
+    "distribution",
+    "management",
+    "nextjs",
+    "express",
+    "prisma",
+    "postgresql"
+  ],
+  "author": "Pharma DMS Team",
+  "license": "ISC"
 }
